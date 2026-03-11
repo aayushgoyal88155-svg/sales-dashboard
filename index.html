@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 25.8.4.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
+		pre { font-size: 10pt; font-family: "Liberation Mono", monospace; background: transparent }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;title&gt;Agent Sales Dashboard&lt;/title&gt;
+
+&lt;style&gt;
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+padding:20px;
+}
+
+h1{
+text-align:center;
+color:#FFD700;
+}
+
+.container{
+display:flex;
+gap:30px;
+}
+
+form{
+background:#222;
+padding:20px;
+border-radius:10px;
+width:300px;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin:8px 0;
+border:none;
+border-radius:5px;
+}
+
+button{
+background:#FFD700;
+border:none;
+padding:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.dashboard{
+flex:1;
+}
+
+.cards{
+display:flex;
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#222;
+padding:20px;
+flex:1;
+border-radius:10px;
+text-align:center;
+}
+
+.card h2{
+color:#FFD700;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#222;
+}
+
+th{
+background:#FFD700;
+color:black;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #444;
+text-align:center;
+}
+
+.filter{
+margin-bottom:15px;
+}
+
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h1&gt;Sales Performance Dashboard&lt;/h1&gt;
+
+&lt;div class=&quot;container&quot;&gt;
+
+&lt;form id=&quot;salesForm&quot;&gt;
+
+&lt;h3&gt;Agent Entry&lt;/h3&gt;
+
+&lt;input type=&quot;date&quot; id=&quot;date&quot; required&gt;
+
+&lt;select id=&quot;agent&quot;&gt;
+&lt;option value=&quot;Palak&quot;&gt;Palak&lt;/option&gt;
+&lt;option value=&quot;Sandeep&quot;&gt;Sandeep&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;input type=&quot;number&quot; id=&quot;calls&quot; placeholder=&quot;Calls Made&quot; required&gt;
+&lt;input type=&quot;number&quot; id=&quot;orders&quot; placeholder=&quot;Orders Closed&quot; required&gt;
+&lt;input type=&quot;number&quot; id=&quot;sales&quot; placeholder=&quot;Sales Amount&quot; required&gt;
+
+&lt;button type=&quot;submit&quot;&gt;Submit Entry&lt;/button&gt;
+
+&lt;/form&gt;
+
+
+&lt;div class=&quot;dashboard&quot;&gt;
+
+&lt;div class=&quot;cards&quot;&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Total Calls&lt;/h3&gt;
+&lt;h2 id=&quot;totalCalls&quot;&gt;0&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Total Orders&lt;/h3&gt;
+&lt;h2 id=&quot;totalOrders&quot;&gt;0&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Total Sales&lt;/h3&gt;
+&lt;h2 id=&quot;totalSales&quot;&gt;₹0&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;AOV&lt;/h3&gt;
+&lt;h2 id=&quot;aov&quot;&gt;₹0&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div class=&quot;cards&quot;&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Palak Conversion %&lt;/h3&gt;
+&lt;h2 id=&quot;palakConv&quot;&gt;0%&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Sandeep Conversion %&lt;/h3&gt;
+&lt;h2 id=&quot;sandeepConv&quot;&gt;0%&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Avg Calls / Agent&lt;/h3&gt;
+&lt;h2 id=&quot;avgCalls&quot;&gt;0&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div class=&quot;filter&quot;&gt;
+
+&lt;input type=&quot;date&quot; id=&quot;filterDate&quot;&gt;
+&lt;button onclick=&quot;filterDay()&quot;&gt;View Day&lt;/button&gt;
+&lt;button onclick=&quot;loadSheetData()&quot;&gt;Reset&lt;/button&gt;
+
+&lt;/div&gt;
+
+&lt;table id=&quot;dataTable&quot;&gt;
+
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Date&lt;/th&gt;
+&lt;th&gt;Agent&lt;/th&gt;
+&lt;th&gt;Calls&lt;/th&gt;
+&lt;th&gt;Orders&lt;/th&gt;
+&lt;th&gt;Sales&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;&lt;/tbody&gt;
+
+&lt;/table&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+
+let data=[]
+
+const sheetURL=&quot;https://script.google.com/macros/s/AKfycbw9TeE6b_BrF87bVy1GhKEjo6EK_jvXJBM44A8hX1OQHI9p56YzEynrWBuWbUh7_bjIEQ/exec&quot;
+
+function loadSheetData(){
+
+fetch(sheetURL)
+.then(res=&gt;res.json())
+.then(sheetData=&gt;{
+
+data=[]
+
+sheetData.forEach(r=&gt;{
+
+data.push({
+date:r[0],
+agent:(r[1] || &quot;&quot;).toString().trim(),
+calls:parseInt(r[2]) || 0,
+orders:parseInt(r[3]) || 0,
+sales:parseInt(r[4]) || 0
+})
+
+})
+
+updateDashboard(data)
+
+})
+.catch(err=&gt;{
+console.error(&quot;Error loading sheet:&quot;,err)
+})
+
+}
+
+document.getElementById('salesForm').addEventListener('submit',function(e){
+
+e.preventDefault()
+
+let date=document.getElementById('date').value
+let agent=document.getElementById('agent').value
+let calls=parseInt(document.getElementById('calls').value)
+let orders=parseInt(document.getElementById('orders').value)
+let sales=parseInt(document.getElementById('sales').value)
+
+let duplicate=data.find(d=&gt;d.date===date &amp;&amp; d.agent===agent)
+
+if(duplicate){
+alert(&quot;Entry already exists for this agent today&quot;)
+return
+}
+
+fetch(sheetURL,{
+method:&quot;POST&quot;,
+body:JSON.stringify({
+date:date,
+agent:agent,
+calls:calls,
+orders:orders,
+sales:sales
+})
+})
+.then(()=&gt;loadSheetData())
+
+})
+
+function updateDashboard(dataset){
+
+let tbody=document.querySelector('#dataTable tbody')
+tbody.innerHTML=&quot;&quot;
+
+let totalCalls=0
+let totalOrders=0
+let totalSales=0
+
+let agentStats={
+Palak:{calls:0,orders:0},
+Sandeep:{calls:0,orders:0}
+}
+
+dataset.forEach(d=&gt;{
+
+tbody.innerHTML+=`
+&lt;tr&gt;
+&lt;td&gt;${d.date}&lt;/td&gt;
+&lt;td&gt;${d.agent}&lt;/td&gt;
+&lt;td&gt;${d.calls}&lt;/td&gt;
+&lt;td&gt;${d.orders}&lt;/td&gt;
+&lt;td&gt;${d.sales}&lt;/td&gt;
+&lt;/tr&gt;
+`
+
+totalCalls+=d.calls
+totalOrders+=d.orders
+totalSales+=d.sales
+
+if(agentStats[d.agent]){
+agentStats[d.agent].calls+=d.calls
+agentStats[d.agent].orders+=d.orders
+}
+
+})
+
+document.getElementById('totalCalls').innerText=totalCalls
+document.getElementById('totalOrders').innerText=totalOrders
+document.getElementById('totalSales').innerText=&quot;₹&quot;+totalSales
+
+let aov = totalOrders ? (totalSales/totalOrders).toFixed(0) : 0
+document.getElementById('aov').innerText=&quot;₹&quot;+aov
+
+let palakConv = agentStats.Palak.calls ? ((agentStats.Palak.orders/agentStats.Palak.calls)*100).toFixed(1) : 0
+let sandeepConv = agentStats.Sandeep.calls ? ((agentStats.Sandeep.orders/agentStats.Sandeep.calls)*100).toFixed(1) : 0
+
+document.getElementById('palakConv').innerText=palakConv+&quot;%&quot;
+document.getElementById('sandeepConv').innerText=sandeepConv+&quot;%&quot;
+
+let avgCalls=((agentStats.Palak.calls+agentStats.Sandeep.calls)/2).toFixed(0)
+document.getElementById('avgCalls').innerText=avgCalls
+
+}
+
+function filterDay(){
+
+let selected=document.getElementById(&quot;filterDate&quot;).value
+let filtered=data.filter(d=&gt;d.date===selected)
+updateDashboard(filtered)
+
+}
+
+loadSheetData()
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
